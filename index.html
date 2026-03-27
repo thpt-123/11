@@ -3,442 +3,369 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>12B1: Ký ức Thanh Xuân & Khát vọng 2026</title>
+    <title>12B11: Thanh Xuân Rực Rỡ & Quyết Chiến 2026</title>
     <style>
-        /* --- CSS ARCHITECTURE & VARIABLES --- */
         :root {
-            --primary-red: #e74c3c; /* Tượng trưng hoa phượng  */
-            --primary-purple: #8e44ad; /* Tượng trưng bằng lăng [3] */
-            --accent-gold: #f1c40f; /* Tượng trưng cho sự thành công  */
-            --glass-bg: rgba(255, 255, 255, 0.12);
-            --glass-border: rgba(255, 255, 255, 0.25);
-            --text-main: #f5f6fa;
-            --text-secondary: #dcdde1;
-            --font-main: 'Montserrat', 'Segoe UI', sans-serif;
-            --transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            --primary-red: #ff4d4d;
+            --dark-bg: #050505;
+            --glass: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.15);
+            --gold: #ffcc00;
+            --font-main: 'Segoe UI', Roboto, sans-serif;
         }
 
-        /* --- GLOBAL STYLES --- */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            background: #0a0a0a;
-            color: var(--text-main);
+            background: var(--dark-bg);
+            color: #fff;
             font-family: var(--font-main);
             overflow-x: hidden;
-            background-image: radial-gradient(circle at 50% 50%, #1a1a2e 0%, #0a0a0a 100%);
+            line-height: 1.6;
         }
 
-        canvas#petalCanvas {
+        /* --- BACKGROUND ENGINE --- */
+        #bg-canvas {
             position: fixed;
-            top: 0;
-            left: 0;
-            z-index: 1;
-            pointer-events: none;
+            top: 0; left: 0;
+            z-index: -1;
+            background: radial-gradient(circle at center, #1a0a0a 0%, #050505 100%);
         }
 
-        /* --- LAYOUT STRUCTURE --- */
-       .wrapper {
-            position: relative;
-            z-index: 10;
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
+        /* --- NAVIGATION --- */
+        nav {
+            position: fixed;
+            top: 0; width: 100%;
+            padding: 20px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--glass-border);
         }
 
-        section {
-            min-height: 100vh;
+       .logo { font-weight: 900; font-size: 1.5rem; color: var(--primary-red); letter-spacing: 2px; }
+
+        /* --- HERO SECTION --- */
+       .hero {
+            height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 100px 0;
-        }
-
-        /* --- HEADER SECTION --- */
-       .hero {
             text-align: center;
+            padding: 20px;
         }
 
-       .class-badge {
-            display: inline-block;
-            padding: 10px 25px;
-            background: rgba(231, 76, 60, 0.2);
-            border: 1px solid var(--primary-red);
-            border-radius: 50px;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 4px;
-            margin-bottom: 25px;
-            animation: fadeInDown 1s ease-out;
-        }
-
-        h1.main-title {
-            font-size: clamp(3rem, 10vw, 7rem);
+       .class-name {
+            font-size: clamp(4rem, 15vw, 10rem);
             font-weight: 900;
-            line-height: 1.1;
-            margin-bottom: 20px;
-            background: linear-gradient(to bottom, #fff, #95a5a6);
+            text-transform: uppercase;
+            background: linear-gradient(to bottom, #fff 30%, var(--primary-red));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 5px 15px rgba(0,0,0,0.5));
+            margin-bottom: 10px;
+            filter: drop-shadow(0 10px 20px rgba(255,77,77,0.3));
         }
 
-       .solo-slogan {
-            font-size: 1.8rem;
-            color: var(--accent-gold);
+       .slogan-main {
+            font-size: 1.5rem;
+            color: var(--gold);
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            margin-bottom: 30px;
             font-weight: 300;
-            margin-bottom: 40px;
-            letter-spacing: 2px;
-            opacity: 0;
-            animation: fadeInUp 1s ease-out 0.5s forwards;
         }
 
-        /* --- COUNTDOWN COMPONENT --- */
-       .countdown {
+        /* --- COUNTDOWN --- */
+       .countdown-container {
             display: flex;
             gap: 20px;
-            flex-wrap: wrap;
-            justify-content: center;
-            margin-top: 20px;
-        }
-
-       .cd-item {
-            background: var(--glass-bg);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border: 1px solid var(--glass-border);
-            padding: 30px;
-            border-radius: 20px;
-            min-width: 130px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
-            transition: var(--transition);
-        }
-
-       .cd-item:hover {
-            transform: translateY(-10px);
-            border-color: var(--primary-red);
-            background: rgba(255, 255, 255, 0.15);
-        }
-
-       .cd-val {
-            display: block;
-            font-size: 3.5rem;
-            font-weight: 800;
-            color: var(--text-main);
-        }
-
-       .cd-label {
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: var(--primary-red);
-        }
-
-        /* --- QUOTE CAROUSEL --- */
-       .quote-box {
-            width: 100%;
-            max-width: 900px;
-            background: rgba(0, 0, 0, 0.5);
-            border-left: 4px solid var(--primary-purple);
-            padding: 50px;
-            margin: 100px 0;
-            position: relative;
-        }
-
-       .quote-text {
-            font-size: 1.6rem;
-            line-height: 1.6;
-            font-style: italic;
-            min-height: 120px;
-        }
-
-       .cursor {
-            display: inline-block;
-            width: 10px;
-            height: 30px;
-            background: var(--primary-red);
-            margin-left: 5px;
-            animation: blink 0.8s infinite;
-        }
-
-        /* --- MOTIVATION GRID --- */
-       .grid-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 30px;
-            width: 100%;
             margin-top: 50px;
         }
 
-       .motivation-card {
-            background: var(--glass-bg);
+       .time-box {
+            background: var(--glass);
             border: 1px solid var(--glass-border);
+            padding: 20px;
+            border-radius: 15px;
+            min-width: 100px;
+            backdrop-filter: blur(10px);
+            transition: 0.3s;
+        }
+
+       .time-box:hover { transform: translateY(-10px); border-color: var(--primary-red); }
+
+       .time-num { display: block; font-size: 2.5rem; font-weight: 800; }
+       .time-label { font-size: 0.7rem; text-transform: uppercase; color: var(--primary-red); }
+
+        /* --- CONTENT SECTIONS --- */
+       .container { max-width: 1200px; margin: 0 auto; padding: 100px 20px; }
+
+       .section-title {
+            font-size: 3rem;
+            margin-bottom: 50px;
+            text-align: center;
+            position: relative;
+        }
+
+       .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px; left: 50%;
+            transform: translateX(-50%);
+            width: 100px; height: 3px;
+            background: var(--primary-red);
+        }
+
+        /* --- GLASS CARDS --- */
+       .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+       .card {
+            background: var(--glass);
             padding: 40px;
             border-radius: 25px;
-            transition: var(--transition);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(15px);
+            transition: 0.5s;
+            position: relative;
+            overflow: hidden;
         }
 
-       .motivation-card:hover {
-            background: rgba(231, 76, 60, 0.05);
-            border-color: var(--accent-gold);
+       .card:hover { background: rgba(255, 77, 77, 0.05); border-color: var(--primary-red); }
+
+       .card h3 { color: var(--gold); margin-bottom: 15px; font-size: 1.5rem; }
+
+        /* --- QUOTE BOX --- */
+       .quote-wrapper {
+            background: linear-gradient(45deg, rgba(255,77,77,0.1), rgba(0,0,0,0));
+            padding: 60px;
+            border-radius: 30px;
+            margin: 50px 0;
+            border-left: 5px solid var(--primary-red);
         }
 
-       .m-title {
-            color: var(--accent-gold);
-            font-size: 1.4rem;
-            margin-bottom: 15px;
-            text-transform: uppercase;
+        #typewriter { font-size: 1.8rem; font-style: italic; min-height: 80px; }
+
+        /* --- THE "GAN" SECTION --- */
+       .solo-gan {
+            background: var(--primary-red);
+            color: #000;
+            padding: 100px 20px;
+            text-align: center;
+            clip-path: polygon(0 15%, 100% 0, 100% 85%, 0 100%);
+            margin: 100px 0;
         }
 
-       .m-content {
-            font-size: 1.1rem;
-            line-height: 1.7;
-            color: var(--text-secondary);
+       .solo-gan h2 { font-size: 5rem; font-weight: 900; }
+
+        /* --- FOOTER --- */
+        footer {
+            padding: 50px;
+            text-align: center;
+            border-top: 1px solid var(--glass-border);
+            color: #666;
         }
 
         /* --- ANIMATIONS --- */
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0; }
-        }
-
-        /* --- RESPONSIVE --- */
-        @media (max-width: 768px) {
-           .cd-item { min-width: 100px; padding: 20px; }
-           .cd-val { font-size: 2rem; }
-           .quote-box { padding: 30px; }
-           .quote-text { font-size: 1.2rem; }
-        }
-
-        /* --- UTILITY CLASSES FOR JS --- */
-       .reveal { opacity: 0; transform: translateY(30px); transition: 1s all ease; }
+       .reveal { opacity: 0; transform: translateY(50px); transition: 1s all ease; }
        .reveal.active { opacity: 1; transform: translateY(0); }
 
     </style>
 </head>
 <body>
 
-    <canvas id="petalCanvas"></canvas>
+    <nav>
+        <div class="logo">12B11 LEGEND</div>
+        <div class="nav-links">2023 - 2026</div>
+    </nav>
 
-    <div class="wrapper">
-        <section class="hero">
-            <div class="class-badge">Huyền thoại niên khóa 2023-2026</div>
-            <h1 class="main-title">TẠM BIỆT<br>12B1 THÂN YÊU</h1>
-            <p class="solo-slogan">"Đoàn kết là never chết - Quyết chiến 2026"</p>
-            
-            <div class="countdown" id="main-countdown">
-                <div class="cd-item">
-                    <span class="cd-val" id="d-val">00</span>
-                    <span class="cd-label">Ngày</span>
-                </div>
-                <div class="cd-item">
-                    <span class="cd-val" id="h-val">00</span>
-                    <span class="cd-label">Giờ</span>
-                </div>
-                <div class="cd-item">
-                    <span class="cd-val" id="m-val">00</span>
-                    <span class="cd-label">Phút</span>
-                </div>
-                <div class="cd-item">
-                    <span class="cd-val" id="s-val">00</span>
-                    <span class="cd-label">Giây</span>
-                </div>
+    <canvas id="bg-canvas"></canvas>
+
+    <div class="hero">
+        <p class="slogan-main">Huyền thoại niên khóa 2023-2026</p>
+        <h1 class="class-name">12B11</h1>
+        <p style="font-size: 1.2rem; letter-spacing: 3px;">NHÂN TÀI CÁ BIỆT - ĐOÀN KẾT LÀ NEVER CHẾT</p>
+        
+        <div class="countdown-container">
+            <div class="time-box">
+                <span class="time-num" id="days">00</span>
+                <span class="time-label">Ngày</span>
             </div>
-        </section>
-
-        <section class="reveal">
-            <div class="quote-box">
-                <div class="quote-text" id="typewriter"></div>
-                <div class="cursor"></div>
+            <div class="time-box">
+                <span class="time-num" id="hours">00</span>
+                <span class="time-label">Giờ</span>
             </div>
-        </section>
-
-        <section class="reveal">
-            <h2 style="font-size: 2.5rem; margin-bottom: 40px; text-align: center;">HÀNH TRANG SĨ TỬ 2026</h2>
-            <div class="grid-container">
-                <div class="motivation-card">
-                    <h3 class="m-title">Tâm Thế Vững Vàng</h3>
-                    <p class="m-content">"Hãy xem kỳ thi này như một trạm dừng nhỏ. Bạn đã nỗ lực 12 năm, thành công sẽ đến với người không ngừng cố gắng!" </p>
-                </div>
-                <div class="motivation-card">
-                    <h3 class="m-title">Năng Lượng Bứt Phá</h3>
-                    <p class="m-content">"Chúc các sĩ tử 12B1 đi thi như đi lượm vàng, kiến thức ngập tràn, đề khó mấy cũng thành dễ ợt!" </p>
-                </div>
-                <div class="motivation-card">
-                    <h3 class="m-title">Đồng Đội Đồng Hành</h3>
-                    <p class="m-content">"Chúng ta đã cùng ngồi dưới một mái trường, cùng đau đầu vì một kỳ thi. Đừng quên nhau nhé!" [5]</p>
-                </div>
-                <div class="motivation-card">
-                    <h3 class="m-title">Khát Vọng Đỉnh Cao</h3>
-                    <p class="m-content">"Cánh cửa ĐH đang rộng mở. Chúc các bạn vượt vũ môn thành công và đỗ vào trường mơ ước!" </p>
-                </div>
-                <div class="motivation-card">
-                    <h3 class="m-title">Chiến Thuật Làm Bài</h3>
-                    <p class="m-content">"Đọc kỹ đề, làm câu nào chắc câu đó. Nhớ mang theo não và sự tự tin vào phòng thi nhé!" </p>
-                </div>
-                <div class="motivation-card">
-                    <h3 class="m-title">Lời Chúc May Mắn</h3>
-                    <p class="m-content">"Cá chép hóa rồng, 12B1 thẳng tiến nguyện vọng 1. Hẹn gặp ở cổng trường đại học!" </p>
-                </div>
+            <div class="time-box">
+                <span class="time-num" id="minutes">00</span>
+                <span class="time-label">Phút</span>
             </div>
-        </section>
-
-        <footer style="padding: 100px 0; text-align: center; color: #555; border-top: 1px solid #222;">
-            <p>12B1: SINH RA ĐỂ TỎA SÁNG | NIÊN KHÓA 2023-2026</p>
-            <p style="margin-top: 10px;">Lưu giữ bởi đội ngũ công nghệ lớp 12B1</p>
-        </footer>
+            <div class="time-box">
+                <span class="time-num" id="seconds">00</span>
+                <span class="time-label">Giây</span>
+            </div>
+        </div>
     </div>
 
+    <div class="container">
+        <div class="reveal">
+            <h2 class="section-title">Lời Nhắn Gửi Thanh Xuân</h2>
+            <div class="quote-wrapper">
+                <div id="typewriter"></div>
+            </div>
+        </div>
+
+        <div class="reveal grid" style="margin-top: 100px;">
+            <div class="card">
+                <h3>📚 Trí Tuệ 12B11</h3>
+                <p>"Những nỗ lực của 12 năm học sẽ được đền đáp. Hãy vững vàng bước vào kỳ thi và đạt kết quả xuất sắc nhất!" </p>
+            </div>
+            <div class="card">
+                <h3>🔥 Nhiệt Huyết</h3>
+                <p>"Chúc các sĩ tử 12B11 đi thi như đi lượm vàng, đề khó mấy cũng thành dễ ợt. Quyết chiến 2026!" </p>
+            </div>
+            <div class="card">
+                <h3>💎 Gắn Kết</h3>
+                <p>"Dù mai này mỗi đứa một phương, đừng bao giờ quên chúng ta đã từng ngồi chung dưới một mái trường." </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="solo-gan">
+        <h2>12B11: ĐỘNG VÀO LÀ ĂN CÁM!</h2>
+        <p style="font-weight: 800; font-size: 1.5rem; margin-top: 20px;">SỐ 2 LÀ KHIÊM TỐN - KHÔNG AI LÀ SỐ 1</p>
+    </div>
+
+    <div class="container reveal">
+        <h2 class="section-title">Hành Trang Sĩ Tử</h2>
+        <div class="grid">
+            <div class="card">
+                <h3>Cố Gắng Hết Mình</h3>
+                <p>"Thành công sẽ đến với những ai không ngừng nỗ lực. Đỗ đại học nhé, bạn của tôi ơi!" </p>
+            </div>
+            <div class="card">
+                <h3>Bình Tĩnh Tự Tin</h3>
+                <p>"Kỳ thi này không làm khó được bạn đâu. Hãy như một chiến binh thực thụ của 12B11." </p>
+            </div>
+            <div class="card">
+                <h3>Hẹn Ngày Gặp Lại</h3>
+                <p>"Hẹn gặp lại các bạn ở cổng trường Đại học với nụ cười chiến thắng rạng rỡ nhất!" </p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Tập thể lớp 12B11 - THPT Phú Bài. All rights reserved.</p>
+        <p style="margin-top: 10px;">Thiết kế bởi tình yêu dành cho 12B11 ❤️</p>
+    </footer>
+
     <script>
-        /* 
-           ADVANCED JAVASCRIPT MODULES 
-           1. Particle Physics Engine (Petals)
-           2. Date Calculation & Real-time Sync
-           3. Sequential Typewriter Logic
-           4. Intersection Observer for Scroll Animations
-        */
-
-        // 1. PETAL CANVAS LOGIC
-        const canvas = document.getElementById('petalCanvas');
+        // --- PETAL SYSTEM (HOA PHUONG ROI) ---
+        const canvas = document.getElementById('bg-canvas');
         const ctx = canvas.getContext('2d');
-        let width, height, particles =;
+        let width, height, petals =;
 
-        function initCanvas() {
+        function init() {
             width = canvas.width = window.innerWidth;
             height = canvas.height = window.innerHeight;
-            particles =;
-            for(let i = 0; i < 120; i++) {
-                particles.push(new Petal());
-            }
+            petals =;
+            for(let i=0; i<100; i++) petals.push(new Petal());
         }
 
         class Petal {
             constructor() {
                 this.x = Math.random() * width;
                 this.y = Math.random() * height - height;
-                this.size = Math.random() * 5 + 3;
-                this.speedX = Math.random() * 2 - 1;
-                this.speedY = Math.random() * 1.5 + 0.5;
-                this.rotation = Math.random() * 360;
+                this.size = Math.random() * 5 + 2;
+                this.vY = Math.random() * 1.5 + 0.5;
+                this.vX = Math.random() * 1 - 0.5;
+                this.angle = Math.random() * 360;
                 this.spin = Math.random() * 2 - 1;
-                this.color = Math.random() > 0.6? '#e74c3c' : '#9b59b6';
             }
             update() {
-                this.x += this.speedX + Math.sin(this.y / 100);
-                this.y += this.speedY;
-                this.rotation += this.spin;
-                if(this.y > height) {
-                    this.y = -20;
-                    this.x = Math.random() * width;
-                }
+                this.y += this.vY;
+                this.x += this.vX + Math.sin(this.y/50);
+                this.angle += this.spin;
+                if(this.y > height) { this.y = -20; this.x = Math.random()*width; }
             }
             draw() {
                 ctx.save();
                 ctx.translate(this.x, this.y);
-                ctx.rotate(this.rotation * Math.PI / 180);
-                ctx.fillStyle = this.color;
+                ctx.rotate(this.angle * Math.PI / 180);
+                ctx.fillStyle = '#ff4d4d';
                 ctx.beginPath();
-                ctx.ellipse(0, 0, this.size, this.size * 1.5, 0, 0, Math.PI * 2);
+                ctx.ellipse(0, 0, this.size, this.size*1.5, 0, 0, Math.PI*2);
                 ctx.fill();
                 ctx.restore();
             }
         }
 
-        function animate() {
-            ctx.clearRect(0, 0, width, height);
-            particles.forEach(p => { p.update(); p.draw(); });
-            requestAnimationFrame(animate);
+        function render() {
+            ctx.clearRect(0,0,width,height);
+            petals.forEach(p => { p.update(); p.draw(); });
+            requestAnimationFrame(render);
         }
 
-        window.addEventListener('resize', initCanvas);
-        initCanvas();
-        animate();
+        window.addEventListener('resize', init);
+        init(); render();
 
-        // 2. COUNTDOWN LOGIC
-        // Target: June 11, 2026 [7]
-        const targetDate = new Date("June 11, 2026 07:30:00").getTime();
-
-        function updateCountdown() {
+        // --- COUNTDOWN SYSTEM (Target June 11, 2026) ---
+        const target = new Date("June 11, 2026 07:30:00").getTime();
+        function updateClock() {
             const now = new Date().getTime();
-            const diff = targetDate - now;
+            const diff = target - now;
+            if(diff < 0) return;
 
-            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((diff % (1000 * 60)) / 1000);
 
-            document.getElementById('d-val').innerText = days < 10? '0'+days : days;
-            document.getElementById('h-val').innerText = hours < 10? '0'+hours : hours;
-            document.getElementById('m-val').innerText = minutes < 10? '0'+minutes : minutes;
-            document.getElementById('s-val').innerText = seconds < 10? '0'+seconds : seconds;
+            document.getElementById('days').innerText = d < 10? '0'+d : d;
+            document.getElementById('hours').innerText = h < 10? '0'+h : h;
+            document.getElementById('minutes').innerText = m < 10? '0'+m : m;
+            document.getElementById('seconds').innerText = s < 10? '0'+s : s;
         }
-        setInterval(updateCountdown, 1000);
+        setInterval(updateClock, 1000);
+        updateClock();
 
-        // 3. TYPEWRITER LOGIC
-        const messages =",
-            "Tuổi trẻ là khoảng thời gian đáng trân trọng nhất cuộc đời. ",
-            "Cám ơn 12B1 đã là một phần tuyệt vời trong ký ức của tôi. ",
-            "Mùa hè này, chúng ta sẽ viết tiếp những giấc mơ vĩ đại hơn. [4]",
-            "Dù mai này ra sao, hãy nhớ về nhau dưới mái trường này. [5]",
-            "Học hết mình, quẩy nhiệt tình - Đó chính là chất 12B1! ",
-            "Chúng ta không hoàn hảo, nhưng là duy nhất. [21]"
+        // --- TYPEWRITER SYSTEM ---
+        const quotes =",
+            "Cảm ơn vì đã cùng nhau đi qua những ngày mặt trời rực rỡ nhất. ",
+            "3 năm cấp 3 trôi nhanh quá, như tà áo dài trắng khẽ vắt ngang lòng... [8]",
+            "Giá mà níu được thời gian, để cho đẹp mãi xuân tràn 12B11. ",
+            "Chúng ta không hoàn hảo, nhưng chúng ta là DUY NHẤT. ",
+            "Tạm biệt nhé tuổi học trò thơ dại, 12B11 mãi trong tim tôi! "
         ];
+        let qIdx = 0, cIdx = 0, isErasing = false;
+        const typeEl = document.getElementById('typewriter');
 
-        let msgIndex = 0;
-        let charIndex = 0;
-        const target = document.getElementById('typewriter');
-
-        function type() {
-            if (charIndex < messages[msgIndex].length) {
-                target.textContent += messages[msgIndex].charAt(charIndex);
-                charIndex++;
-                setTimeout(type, 80);
+        function typeEffect() {
+            const current = quotes[qIdx];
+            if(!isErasing) {
+                typeEl.innerText = current.substring(0, cIdx++);
+                if(cIdx > current.length) { isErasing = true; setTimeout(typeEffect, 2000); }
+                else setTimeout(typeEffect, 50);
             } else {
-                setTimeout(erase, 2500);
+                typeEl.innerText = current.substring(0, cIdx--);
+                if(cIdx < 0) { isErasing = false; qIdx = (qIdx+1)%quotes.length; setTimeout(typeEffect, 500); }
+                else setTimeout(typeEffect, 30);
             }
         }
+        typeEffect();
 
-        function erase() {
-            if (charIndex > 0) {
-                target.textContent = messages[msgIndex].substring(0, charIndex - 1);
-                charIndex--;
-                setTimeout(erase, 40);
-            } else {
-                msgIndex = (msgIndex + 1) % messages.length;
-                setTimeout(type, 500);
-            }
-        }
-        type();
-
-        // 4. SCROLL ANIMATIONS
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
-                }
-            });
-        }, { threshold: 0.1 });
-
+        // --- REVEAL SYSTEM ---
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('active'); });
+        });
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
     </script>
 </body>
 </html>
-        
-    
