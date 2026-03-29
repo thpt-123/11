@@ -783,5 +783,51 @@ if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded'
     });
   });
 </script>
+<script>
+(function() {
+    var colors = ["#ff69b4", "#ff1493", "#ffffff"]; // Màu hồng & trắng theo tông 12B11
+    var characters = ["✨", "⭐", "💖", "•"]; // Các hạt lấp lánh
+    var elementGroup = [];
+
+    window.addEventListener('mousemove', function(e) {
+        var x = e.clientX;
+        var y = e.clientY;
+        createParticle(x, y);
+    });
+
+    function createParticle(x, y) {
+        var particle = document.createElement("span");
+        var randomChar = characters[Math.floor(Math.random() * characters.length)];
+        var randomColor = colors[Math.floor(Math.random() * colors.length)];
+        
+        particle.innerHTML = randomChar;
+        particle.style.cssText = `
+            position: fixed;
+            left: ${x}px;
+            top: ${y}px;
+            pointer-events: none;
+            z-index: 999999;
+            color: ${randomColor};
+            font-size: ${Math.random() * 15 + 10}px;
+            transition: transform 1s, opacity 1s;
+            transform: translate(-50%, -50%);
+        `;
+
+        document.body.appendChild(particle);
+        elementGroup.push(particle);
+
+        // Hiệu ứng bay lên và mờ dần
+        setTimeout(function() {
+            particle.style.transform = `translate(-50%, ${-Math.random() * 100 - 50}px) scale(0)`;
+            particle.style.opacity = "0";
+        }, 50);
+
+        // Xóa hạt sau khi diễn xong để không nặng máy
+        setTimeout(function() {
+            particle.remove();
+        }, 1000);
+    }
+})();
+</script>
 </body>
 </html>
