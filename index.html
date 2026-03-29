@@ -771,5 +771,17 @@ async function boot(){
 if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',boot);}else{boot();}
 })();
 </script>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<script>
+  // Đợi web load xong 1 cái là nổ pháo luôn
+  window.addEventListener('load', function() {
+    confetti({
+      particleCount: 150,    // Số lượng hạt pháo (150 hạt cho rực rỡ)
+      spread: 70,           // Độ tỏa ra
+      origin: { y: 0.6 },   // Vị trí bắn (từ giữa màn hình hất lên)
+      colors: ['#ff69b4', '#ff1493', '#ffffff'] // Màu hồng và trắng của lớp mình
+    });
+  });
+</script>
 </body>
 </html>
